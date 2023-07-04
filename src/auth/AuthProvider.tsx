@@ -6,13 +6,25 @@ interface AuthProviderProps {
 
 const AuthContext = createContext({
     isAuthenticated: false,
+    saveUserData: (userData: any) => {},
+    logout: () => {},
 });
 
 export function AuthProvider({children} : AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    function saveUserData(userData: any) {
+        console.log("Saving user data: ", userData);
+        setIsAuthenticated(true);
+    }
+
+    function logout() {
+        console.log("Logging out");
+        setIsAuthenticated(false);
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, saveUserData, logout }}>
             {children}
         </AuthContext.Provider>
     )

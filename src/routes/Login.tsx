@@ -1,6 +1,7 @@
 import DefaultLayout from "../layout/DefaultLayout"
 import { useEffect } from "react"
-import GoogleAuth from "../auth/GoogleAuth"
+import { useAuth } from "../auth/AuthProvider"
+import { Navigate } from "react-router-dom";
 
 // Bug found to render Google button (first approach to remember myself about it)
 // export default function Login() {
@@ -34,9 +35,18 @@ import GoogleAuth from "../auth/GoogleAuth"
 
 // Version 2
 export default function Login() {
+    // If is already authenticated, redirect to dashboard
+    const auth = useAuth();
+    if (auth.isAuthenticated) {
+        return <Navigate to="/dashboard" />
+    }
 
+    // If not, render the login page
     const handleCredentialResponse = (response: any) => {
         console.log("Encoded JWT ID token: " + response.credential)
+        // TODO: Handle response
+        auth.saveUserData(response.credential);
+        
     }
 
     useEffect(() => {
