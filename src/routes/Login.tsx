@@ -2,6 +2,7 @@ import DefaultLayout from "../layout/DefaultLayout"
 import { useEffect } from "react"
 import { useAuth } from "../auth/AuthProvider"
 import { Navigate } from "react-router-dom";
+import { AUTH_API_URL } from "../auth/Constants";
 
 // Bug found to render Google button (first approach to remember myself about it)
 // export default function Login() {
@@ -42,11 +43,36 @@ export default function Login() {
     }
 
     // If not, render the login page
-    const handleCredentialResponse = (response: any) => {
+    const handleCredentialResponse = async (response: any) => {
         console.log("Encoded JWT ID token: " + response.credential)
-        // TODO: Handle response
-        auth.saveUserData(response.credential);
-        
+        // Handle response
+        //auth.saveUserData(response.credential);
+        // send post http request to backend using fetch and handle response body using async await and try catch
+        try {
+            const responseAuth = await fetch(`${AUTH_API_URL}/login/google`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }, 
+                body: JSON.stringify({ credential: response.credential }),
+            });
+            // if response is ok
+            if (responseAuth.ok) {
+                console.log(`token successfully verified by backend`);
+                const res = await responseAuth.json();
+                console.log(res);
+                // TODO: save user data in auth context
+                //auth.saveUserData(responseAuth.user);     // Navigate to dashboard
+            } else {
+                // If 400 series error, token is invalid
+                console.log(`token is invalid`);
+                // If 500 internal server error
+                // console.log(`internal server error`);
+            }
+        } catch (error) {
+            console.log("Fetch error: something went wrong");
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -82,7 +108,7 @@ export default function Login() {
 }
 
 
-// Approach with no error in frontend (show internally using try catch)
+// Approach with no error in frontend (but error is shown internally using try catch)
 // export default function Login() {
 //     return (
 //         <DefaultLayout>
