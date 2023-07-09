@@ -1,3 +1,10 @@
+import DefaultLayout from "../layout/DefaultLayout"
+
 export default function Dashboard() {
-    return <h1>Dashboard</h1>
+    return (
+        <DefaultLayout>
+            <h1>Flow App</h1>
+            <h2>Dashboard</h2>
+        </DefaultLayout>
+    )
 }

@@ -1,8 +1,10 @@
 import DefaultLayout from "../layout/DefaultLayout"
 import { useEffect } from "react"
+import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider"
 import { Navigate } from "react-router-dom";
-import { AUTH_API_URL } from "../auth/Constants";
+import { AUTH_API_URL } from "../auth/constants";
+import { AuthResponseError } from "../types/types";
 
 // Bug found to render Google button (first approach to remember myself about it)
 // export default function Login() {
@@ -36,6 +38,8 @@ import { AUTH_API_URL } from "../auth/Constants";
 
 // Version 2
 export default function Login() {
+    const [errorResponse, setErrorResponse] = useState("");
+
     // If is already authenticated, redirect to dashboard
     const auth = useAuth();
     if (auth.isAuthenticated) {
@@ -44,9 +48,7 @@ export default function Login() {
 
     // If not, render the login page
     const handleCredentialResponse = async (response: any) => {
-        console.log("Encoded JWT ID token: " + response.credential)
-        // Handle response
-        //auth.saveUserData(response.credential);
+        console.log("Google ID token: " + response.credential)
         // send post http request to backend using fetch and handle response body using async await and try catch
         try {
             const responseAuth = await fetch(`${AUTH_API_URL}/login/google`, {
@@ -61,13 +63,19 @@ export default function Login() {
                 console.log(`token successfully verified by backend`);
                 const res = await responseAuth.json();
                 console.log(res);
-                // TODO: save user data in auth context
-                //auth.saveUserData(responseAuth.user);     // Navigate to dashboard
+                // Save user data
+                auth.saveUserData(responseAuth);     // Navigate to dashboard
             } else {
+                // Get error message
                 // If 400 series error, token is invalid
-                console.log(`token is invalid`);
+                console.log(`Received status: ${responseAuth.status}`);
+                console.log(`Received text: ${responseAuth.statusText}`);
+                const res = (await responseAuth.json()) as AuthResponseError;
+                console.log(res.error)
+                setErrorResponse(res.error);
                 // If 500 internal server error
                 // console.log(`internal server error`);
+                // TODO: show error message to user
             }
         } catch (error) {
             console.log("Fetch error: something went wrong");
@@ -101,7 +109,8 @@ export default function Login() {
     return (
         <DefaultLayout>
             <h1>Flow App</h1>
-            <h2>Tu casa de cambio al mejor precio</h2>
+            <h2>Iniciar Sesión</h2>
+            {errorResponse && <div className="errorMessage">{errorResponse}</div>}
             <div id="signInDiv"></div>
         </DefaultLayout>
     )

@@ -11,7 +11,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
                 <nav>
                     <ul>
                         <li><Link to="/">Inicio</Link></li>
-                        {/* <li><Link to="/signup">Registrate</Link></li> */}
+                        <li><Link to="/signup">Registrate</Link></li>
                     </ul>
                 </nav>
             </header>
