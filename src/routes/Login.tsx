@@ -42,10 +42,7 @@ export default function Login() {
 
     // If is already authenticated, redirect to dashboard
     const auth = useAuth();
-    if (auth.isAuthenticated) {
-        return <Navigate to="/dashboard" />
-    }
-
+    
     // If not, render the login page
     const handleCredentialResponse = async (response: any) => {
         console.log("Google ID token: " + response.credential)
@@ -64,7 +61,8 @@ export default function Login() {
                 const res = await responseAuth.json();
                 console.log(res);
                 // Save user data
-                auth.saveUserData(responseAuth);     // Navigate to dashboard
+                auth.saveUserData(res);     // Navigate to dashboard
+                console.log("here??")
             } else {
                 // Get error message
                 // If 400 series error, token is invalid
@@ -72,10 +70,7 @@ export default function Login() {
                 console.log(`Received text: ${responseAuth.statusText}`);
                 const res = (await responseAuth.json()) as AuthResponseError;
                 console.log(res.error)
-                setErrorResponse(res.error);
-                // If 500 internal server error
-                // console.log(`internal server error`);
-                // TODO: show error message to user
+                setErrorResponse(res.error);   // Show error message to user
             }
         } catch (error) {
             console.log("Fetch error: something went wrong");
@@ -105,6 +100,11 @@ export default function Login() {
         }
 
     }, [])
+
+    if (auth.isAuthenticated) {
+        console.log("User alredy register...go to dashboard")
+        return <Navigate to="/dashboard" />
+    }
 
     return (
         <DefaultLayout>

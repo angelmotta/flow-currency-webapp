@@ -15,6 +15,7 @@ export function AuthProvider({children} : AuthProviderProps) {
 
     function saveUserData(userData: any) {
         console.log("Saving user data: ", userData);
+        console.log("Setting isAuthenticated to true");
         setIsAuthenticated(true);
     }
 
