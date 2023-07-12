@@ -7,6 +7,7 @@ import Signup from './routes/Signup.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import ProtectedRoute from './routes/ProtectedRoute.tsx';
 import { AuthProvider } from './auth/AuthProvider.tsx';
+import SignupUser from './routes/SignupUser.tsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <Signup />,
+  },
+  {
+    path: '/signup/user',
+    element: <SignupUser />,
   },
   {
     path: '/',

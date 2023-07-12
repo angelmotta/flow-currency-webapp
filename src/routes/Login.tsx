@@ -6,37 +6,6 @@ import { Navigate } from "react-router-dom";
 import { AUTH_API_URL } from "../auth/constants";
 import { AuthResponseError } from "../types/types";
 
-// Bug found to render Google button (first approach to remember myself about it)
-// export default function Login() {
-
-//     const handleCredentialResponse = (response: any) => {
-//         console.log("Encoded JWT ID token: " + response.credential)
-//     }
-
-//     useEffect(() => {
-//         /* global google */
-//         google.accounts.id.initialize({
-//             client_id: "535433429806-oc8egpmgdvuot4bic0pc900q3pl3i7rv.apps.googleusercontent.com",
-//             callback: handleCredentialResponse,
-//         });
-
-//         google.accounts.id.renderButton(
-//             document.getElementById("signInDiv"),
-//             { theme: "outline", size: "large", text: "continue_with", shape: "rectangular" }
-//         );
-
-//     }, [])
-
-//     return (
-//         <DefaultLayout>
-//             <h1>Flow App</h1>
-//             <h2>Tu casa de cambio al mejor precio</h2>
-//             <div id="signInDiv"></div>
-//         </DefaultLayout>
-//     )
-// }
-
-// Version 2
 export default function Login() {
     const [errorResponse, setErrorResponse] = useState("");
 
@@ -61,8 +30,7 @@ export default function Login() {
                 const res = await responseAuth.json();
                 console.log(res);
                 // Save user data
-                auth.saveUserData(res);     // Navigate to dashboard
-                console.log("here??")
+                auth.saveUserData(res);     // State navigate to dashboard
             } else {
                 // Get error message
                 // If 400 series error, token is invalid
@@ -102,7 +70,6 @@ export default function Login() {
     }, [])
 
     if (auth.isAuthenticated) {
-        console.log("User alredy register...go to dashboard")
         return <Navigate to="/dashboard" />
     }
 
@@ -115,15 +82,3 @@ export default function Login() {
         </DefaultLayout>
     )
 }
-
-
-// Approach with no error in frontend (but error is shown internally using try catch)
-// export default function Login() {
-//     return (
-//         <DefaultLayout>
-//             <h1>Flow App</h1>
-//             <h2>Tu casa de cambio al mejor precio</h2>
-//             <GoogleAuth></GoogleAuth>
-//         </DefaultLayout>
-//     )
-// }

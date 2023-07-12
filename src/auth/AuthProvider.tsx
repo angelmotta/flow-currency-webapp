@@ -6,12 +6,15 @@ interface AuthProviderProps {
 
 const AuthContext = createContext({
     isAuthenticated: false,
+    externalToken: "",
+    setExternalToken: (token: string) => {},
     saveUserData: (userData: any) => {},
     logout: () => {},
 });
 
 export function AuthProvider({children} : AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [externalToken, setExternalToken] = useState<string>("");
 
     function saveUserData(userData: any) {
         console.log("Saving user data: ", userData);
@@ -25,7 +28,13 @@ export function AuthProvider({children} : AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, saveUserData, logout }}>
+        <AuthContext.Provider value={{
+            isAuthenticated, 
+            saveUserData, 
+            logout, 
+            externalToken, 
+            setExternalToken, 
+        }}>
             {children}
         </AuthContext.Provider>
     )

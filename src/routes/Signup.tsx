@@ -12,7 +12,6 @@ export default function Signup() {
     const auth = useAuth();
     const goTo = useNavigate();
 
-    // If not, render the login page
     const handleCredentialResponse = async (response: any) => {
         console.log("Google ID token: " + response.credential)
         // Send post request
@@ -26,18 +25,18 @@ export default function Signup() {
             });
             // if response is ok
             if (responseAuth.ok) {
-                console.log(`user successfully registered`);
-                const res = await responseAuth.json();
-                console.log(res);
-                // Save user data
-                auth.saveUserData(responseAuth);     // Navigate to dashboard
-                // TODO: Request user data (DNI, name, last name, home address, phone number) to complete registration)
-                // Navigate to Create account page
+                console.log(`user successfully validated`);
+                // auth.saveUserData(responseAuth);     // Navigate to dashboard
+                // Save external token to the step register personal information
+                auth.setExternalToken(response.credential);     // Navigate to dashboard
+                // Navigate to SignupUser
+                goTo("/signup/user");
+                console.log(`Oauth flow finished`);
             } else {
                 // User already exists (409: conflict)
                 console.log(`Received status: ${responseAuth.status}`);
                 const res = (await responseAuth.json()) as AuthResponseError;
-                console.log(res.error)
+                console.log(res.error);
                 setErrorResponse(res.error);   // Show error message to user
             }
         } catch (error) {

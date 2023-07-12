@@ -1,8 +1,8 @@
 export interface AuthResponse {
     body: {
+        token: string;
         email: string;
         role: string;
-        token: string;
     }
 }
 
