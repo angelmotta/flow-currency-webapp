@@ -9,3 +9,9 @@ export interface AuthResponse {
 export interface AuthResponseError {
     error: string;
 }
+
+export interface CurrencyRateResponse {
+    srcCurrency: string;
+    dstCurrency: string;
+    rate: string;
+}
