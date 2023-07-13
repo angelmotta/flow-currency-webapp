@@ -48,6 +48,8 @@ export default function Dashboard() {
                         <p>Loading...</p>
                     )}
                 </div>
+                <label>Compra:</label>
+                <div><pre>3.575</pre></div>
                 <button>Iniciar operacion</button>
             </form>
         </DefaultLayout>
