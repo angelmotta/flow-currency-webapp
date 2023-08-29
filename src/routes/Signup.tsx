@@ -23,7 +23,6 @@ export default function Signup() {
                 }, 
                 body: JSON.stringify({ credential: response.credential }),
             });
-            // if response is ok
             if (responseAuth.ok) {
                 console.log(`user successfully validated`);
                 // auth.saveUserData(responseAuth);     // Navigate to dashboard
@@ -42,6 +41,7 @@ export default function Signup() {
         } catch (error) {
             console.log("Fetch error: something went wrong");
             console.log(error);
+            setErrorResponse("Servicio no disponible: intentalo nuevamente en unos minutos");   // Flow App auth service is down
         }
     }
 

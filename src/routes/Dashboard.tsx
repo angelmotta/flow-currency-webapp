@@ -4,7 +4,9 @@ import { CURRENCY_API_URL } from "../auth/constants";
 import { CurrencyRateResponse } from "../types/types";
 
 export default function Dashboard() {
-    const [data, setData] = useState("");
+    const [rateVenta, setRateVenta] = useState("");
+    const [rateCompra, setRateCompra] = useState("");
+    const [errorResponse, setErrorResponse] = useState("");
 
 
     useEffect(() => {
@@ -15,13 +17,15 @@ export default function Dashboard() {
                 const jsonData = await response.json() as CurrencyRateResponse;
                 console.log(jsonData);
                 console.log(jsonData.rate)
-                setData(jsonData.rate);
+                setRateVenta(jsonData.rate);
             } else {
                 const errorResponse = await response.json();
                 console.log(errorResponse);
             }
           } catch (error) {
-            console.error('Error:', error);
+            console.log('ohh Error:');
+            console.error(error);
+            setErrorResponse("Servicio no disponible: intentalo nuevamente en unos minutos");   // Flow Currency API is down
           }
         };
         fetchData();
@@ -37,19 +41,28 @@ export default function Dashboard() {
         <DefaultLayout>
             <h1>Flow App</h1>
             <h2>Tipo de cambio hoy</h2>
+            {errorResponse && <div className="errorMessage">{errorResponse}</div>}
             <form onSubmit={handleSubmit} className="form">
                 <label>Venta:</label>
                 <div>
-                    {data ? (
+                    {rateVenta ? (
                         <div>
-                        <pre>{data}</pre>
+                            <pre>{rateVenta}</pre>
                         </div>
                     ) : (
                         <p>Loading...</p>
                     )}
                 </div>
                 <label>Compra:</label>
-                <div><pre>3.575</pre></div>
+                <div>
+                    {rateCompra ? (
+                        <div>
+                            <pre>{rateCompra}</pre>
+                        </div>
+                    ) : (
+                        <p>Loading...</p>
+                    )} 
+                </div>
                 <button>Iniciar operacion</button>
             </form>
         </DefaultLayout>

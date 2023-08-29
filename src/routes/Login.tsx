@@ -43,6 +43,7 @@ export default function Login() {
         } catch (error) {
             console.log("Fetch error: something went wrong");
             console.log(error);
+            setErrorResponse("Servicio no disponible: intentalo nuevamente en unos minutos");   // Flow App auth service is down
         }
     }
 
